@@ -1,52 +1,122 @@
 window.config = {
-  // default: '/'
   routerBasename: '/',
+  /**
+   * "White Labeling" is used to change the branding, look, and feel of the OHIF
+   * Viewer. These settings, and the color variables that are used by our components,
+   * are the easiest way to rebrand the application.
+   *
+   * More extensive changes are made possible through swapping out the UI library,
+   * Viewer project, or extensions.
+   */
+  whiteLabeling: {
+    /* Optional: Should return a React component to be rendered in the "Logo" section of the application's Top Navigation bar */
+    createLogoComponentFn: function(React) {
+      return React.createElement('a', {
+        target: '_self',
+        rel: 'noopener noreferrer',
+        className: 'header-brand',
+        href: '/',
+        style: {
+          display: 'block',
+          textIndent: '-9999px',
+          background: 'url(/../assets/n42_logo.png)',
+          backgroundSize: 'contain',
+          backgroundRepeat: 'no-repeat',
+          width: '200px',
+        },
+      });
+    },
+  },
+  /**
+   * Internally, the OHIF Viewer fetches data primarily with the
+   * `cornerstoneWADOImageLoader` and the `DICOMWebClient`. If either of these
+   * receive a non-200 response, this method allows you to handle that error.
+   *
+   * Common use cases include:
+   * - Showing a notification with the UINotificationService
+   * - Redirecting the user
+   * - Refreshing an auth token
+   *
+   * @param {Object} error - JS new Error()
+   * @param {XMLHttpRequest} error.request - The XHR request that's onreadystate change triggered this callback
+   * @param {string} error.response - The XHR's response property
+   * @param {number} error.status - The XHR's status property
+   */
+  httpErrorHandler: error => {
+    const { request: xhr, response, status } = err;
+    const { responseType, statusText } = xhr;
+
+    // In local files, status is 0 upon success in Firefox
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      console.log(statusText, response, responseType);
+    } else {
+      console.warn('Likely CORS error');
+    }
+  },
   extensions: [],
   showStudyList: true,
   filterQueryParam: false,
+  /**
+   * Disable caching of servers configuration.
+   *
+   * There will be no effect if you update the servers property of this config
+   * while your application is running because this property is cached in local storage.
+   */
   disableServersCache: false,
+  /**
+   * OHIF's study prefetcher configuration.
+   *
+   * @param {boolean} enabled Whether to enable/disable OHIF's study prefetcher
+   * @param {('all'|'closest'|'downward'|'upward'|'topdown')} order Fetching order: all display sets, the closest ones, downward or top down fashion based on the currently selected display set
+   * @param {number} displaySetCount How much display sets should be prefetched at once (note: this attribute is ignored if order was set to 'all')
+   * @param {boolean} preventCache Prevent images to be cached in Cornerstone Tools's request pool manager
+   * @param {number} prefetchDisplaySetsTimeout Prefetch timeout
+   * @param {boolean} displayProgress Whether to display or not the progress bar in the display set
+   * @param {boolean} includeActiveDisplaySet Include or not the active display set while prefetching
+   */
   studyPrefetcher: {
     enabled: true,
-    order: 'closest',
-    displaySetCount: 3,
+    order: 'all',
+    displaySetCount: 1,
     preventCache: false,
     prefetchDisplaySetsTimeout: 300,
-    maxNumPrefetchRequests: 100,
-    displayProgress: true,
+    displayProgress: false,
     includeActiveDisplaySet: true,
   },
   servers: {
-    dicomWeb: [
-      {
-        name: 'DCM4CHEE',
-        wadoUriRoot: 'https://server.dcmjs.org/dcm4chee-arc/aets/DCM4CHEE/wado',
-        qidoRoot: 'https://server.dcmjs.org/dcm4chee-arc/aets/DCM4CHEE/rs',
-        wadoRoot: 'https://server.dcmjs.org/dcm4chee-arc/aets/DCM4CHEE/rs',
-        qidoSupportsIncludeField: true,
-        imageRendering: 'wadors',
-        thumbnailRendering: 'wadors',
-        enableStudyLazyLoad: true,
-        supportsFuzzyMatching: true,
-      },
-    ],
+    dicomWeb: [],
   },
 
-  // Extensions should be able to suggest default values for these?
-  // Or we can require that these be explicitly set
+  enableGoogleCloudAdapter: true,
+  healthcareApiEndpoint: 'https://healthcare.googleapis.com/v1',
+
+  oidc: [
+    {
+      // ~ REQUIRED
+      // Authorization Server URL
+      authority: 'https://accounts.google.com',
+      client_id:
+        '653987524527-m45ifri5k1q7ram1ql37tcubu334tvq3.apps.googleusercontent.com',
+      redirect_uri: '/callback', // `OHIFStandaloneViewer.js`
+      response_type: 'id_token token',
+      scope:
+        'email profile openid https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/cloud-healthcare', // email profile openid
+      // ~ OPTIONAL
+      post_logout_redirect_uri: '/logout-redirect.html',
+      revoke_uri: 'https://accounts.google.com/o/oauth2/revoke?token=',
+      automaticSilentRenew: true,
+      revokeAccessTokenOnSignout: true,
+    },
+  ],
+  /**
+   * Hotkey definitions.
+   * Supported Keys: https://craig.is/killing/mice
+   *
+   * @param {string} commandName
+   * @param {string} label
+   * @param {array} keys
+   */
   hotkeys: [
-    // ~ Global
-    {
-      commandName: 'incrementActiveViewport',
-      label: 'Next Viewport',
-      keys: ['right'],
-    },
-    {
-      commandName: 'decrementActiveViewport',
-      label: 'Previous Viewport',
-      keys: ['left'],
-    },
-    // Supported Keys: https://craig.is/killing/mice
-    // ~ Cornerstone Extension
     { commandName: 'rotateViewportCW', label: 'Rotate Right', keys: ['r'] },
     { commandName: 'rotateViewportCCW', label: 'Rotate Left', keys: ['l'] },
     { commandName: 'invertViewport', label: 'Invert', keys: ['i'] },
@@ -60,81 +130,17 @@ window.config = {
       label: 'Flip Vertically',
       keys: ['v'],
     },
-    { commandName: 'scaleUpViewport', label: 'Zoom In', keys: ['+'] },
-    { commandName: 'scaleDownViewport', label: 'Zoom Out', keys: ['-'] },
-    { commandName: 'fitViewportToWindow', label: 'Zoom to Fit', keys: ['='] },
-    { commandName: 'resetViewport', label: 'Reset', keys: ['space'] },
-    // clearAnnotations
-    { commandName: 'nextImage', label: 'Next Image', keys: ['down'] },
-    { commandName: 'previousImage', label: 'Previous Image', keys: ['up'] },
-    // firstImage
-    // lastImage
-    {
-      commandName: 'previousViewportDisplaySet',
-      label: 'Previous Series',
-      keys: ['pagedown'],
-    },
-    {
-      commandName: 'nextViewportDisplaySet',
-      label: 'Next Series',
-      keys: ['pageup'],
-    },
-    // ~ Cornerstone Tools
-    { commandName: 'setZoomTool', label: 'Zoom', keys: ['z'] },
-    // ~ Window level presets
-    {
-      commandName: 'windowLevelPreset1',
-      label: 'W/L Preset 1',
-      keys: ['1'],
-    },
-    {
-      commandName: 'windowLevelPreset2',
-      label: 'W/L Preset 2',
-      keys: ['2'],
-    },
-    {
-      commandName: 'windowLevelPreset3',
-      label: 'W/L Preset 3',
-      keys: ['3'],
-    },
-    {
-      commandName: 'windowLevelPreset4',
-      label: 'W/L Preset 4',
-      keys: ['4'],
-    },
-    {
-      commandName: 'windowLevelPreset5',
-      label: 'W/L Preset 5',
-      keys: ['5'],
-    },
-    {
-      commandName: 'windowLevelPreset6',
-      label: 'W/L Preset 6',
-      keys: ['6'],
-    },
-    {
-      commandName: 'windowLevelPreset7',
-      label: 'W/L Preset 7',
-      keys: ['7'],
-    },
-    {
-      commandName: 'windowLevelPreset8',
-      label: 'W/L Preset 8',
-      keys: ['8'],
-    },
-    {
-      commandName: 'windowLevelPreset9',
-      label: 'W/L Preset 9',
-      keys: ['9'],
-    },
   ],
-  cornerstoneExtensionConfig: {},
-  // Following property limits number of simultaneous series metadata requests.
-  // For http/1.x-only servers, set this to 5 or less to improve
-  //  on first meaningful display in viewer
-  // If the server is particularly slow to respond to series metadata
-  //  requests as it extracts the metadata from raw files everytime,
-  //  try setting this to even lower value
-  // Leave it undefined for no limit, suitable for HTTP/2 enabled servers
-  // maxConcurrentMetadataRequests: 5,
+  /**
+   * Configuration passed to the bundled cornerstone extension
+   *
+   * The cornerstone extension is currently tightly coupled to the platform.
+   * Until we're able to decouple it, this key will serve as a workaround to
+   * pass it configuration.
+   *
+   * @param {boolean} hideHandles Whether to show/hide annotation "handles"
+   */
+  cornerstoneExtensionConfig: {
+    hideHandles: true,
+  },
 };
