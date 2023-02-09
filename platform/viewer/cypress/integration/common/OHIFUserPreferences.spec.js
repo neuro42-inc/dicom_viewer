@@ -72,7 +72,7 @@ describe('OHIF User Preferences', () => {
       // Header should be kept in "English (USA)"
       cy.get('.research-use')
         .scrollIntoView()
-        .should('have.text', 'INVESTIGATIONAL USE ONLY');
+        .should('have.text', 'neuro42');
 
       // Options menu should be translated
       cy.get('[data-cy="options-menu"]')
@@ -118,7 +118,7 @@ describe('OHIF User Preferences', () => {
       // Header should be in "English (USA)"
       cy.get('.research-use')
         .scrollIntoView()
-        .should('have.text', 'INVESTIGATIONAL USE ONLY');
+        .should('have.text', 'neuro42');
 
       // Options menu should be in "English (USA)"
       cy.get('[data-cy="options-menu"]')
@@ -293,7 +293,7 @@ describe('OHIF User Preferences', () => {
       // Header should be kept in "English (USA)"
       cy.get('.research-use')
         .scrollIntoView()
-        .should('have.text', 'INVESTIGATIONAL USE ONLY');
+        .should('have.text', 'neuro42');
 
       // Options menu should be translated
       cy.get('[data-cy="options-menu"]')
@@ -333,11 +333,10 @@ describe('OHIF User Preferences', () => {
         .scrollIntoView()
         .click();
 
-
       // Header should be in "English (USA)""
       cy.get('.research-use')
         .scrollIntoView()
-        .should('have.text', 'INVESTIGATIONAL USE ONLY');
+        .should('have.text', 'neuro42');
 
       // Options menu should be in "English (USA)"
       cy.get('[data-cy="options-menu"]')
