@@ -761,7 +761,7 @@
                   title: t('About'),
                   icon: { name: 'info' },
                   onClick: function() {
-                    return c({ content: m.a, title: t('OHIF Viewer - About') });
+                    return c({ content: m.a, title: t('neuro42 DICOM Viewer - About') });
                   },
                 },
                 {
