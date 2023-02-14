@@ -16,11 +16,11 @@ const tabs = [
     Component: HotkeysPreferences,
     customProps: {},
   },
-  {
-    name: 'General',
-    Component: GeneralPreferences,
-    customProps: {},
-  },
+  // {
+  //   name: 'General',
+  //   Component: GeneralPreferences,
+  //   customProps: {},
+  // },
   {
     name: 'Window Level',
     Component: WindowLevelPreferences,
