@@ -14,14 +14,19 @@ const AboutContent = () => {
   const itemsPreset = () => {
     return [
       {
-        name: t('About neuro42'),
+        name: t('neuro42'),
         value: 'https://www.neuro42.ai',
         link: 'https://www.neuro42.ai',
+      },
+      {
+        name: 'Address',
+        value: '2 Bryant St, Suite 240, San Francisco, CA 94105',
       },
       {
         name: 'Version Number',
         value: process.env.VERSION_NUMBER,
       },
+
     ];
   };
 
@@ -43,7 +48,7 @@ const AboutContent = () => {
   return (
     <div className="AboutContent" data-cy="about-modal">
       <div>
-        <h3>{t('Version Information')}</h3>
+        <h3>{t('Information')}</h3>
         <table className="table table-responsive">
           <thead>
             <tr>
