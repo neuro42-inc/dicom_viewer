@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { hot } from 'react-hot-loader/root';
+import { LogoutTimer } from './LogoutTimer';
 
 import OHIFCornerstoneExtension from '@ohif/extension-cornerstone';
 
@@ -187,6 +188,7 @@ class App extends Component {
                                 modal={OHIFModal}
                                 service={UIModalService}
                               >
+                                <LogoutTimer />
                                 <OHIFStandaloneViewer
                                   userManager={this._userManager}
                                 />
