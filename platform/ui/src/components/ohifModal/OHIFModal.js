@@ -28,18 +28,7 @@ const OHIFModal = ({
   children,
 }) => {
   const renderHeader = () => {
-    return (
-      title && (
-        <div className="OHIFModal__header" data-cy="modal-header">
-          <h4>{title}</h4>
-          {closeButton && (
-            <button data-cy="close-button" onClick={onClose}>
-              ×
-            </button>
-          )}
-        </div>
-      )
-    );
+    return title && <></>;
   };
 
   const classes = fullscreen
@@ -57,9 +46,7 @@ const OHIFModal = ({
     >
       <>
         {renderHeader()}
-        <div className="OHIFModal__content" data-cy="modal-content">
-          {children}
-        </div>
+        <></>
       </>
     </Modal>
   );

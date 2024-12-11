@@ -13,6 +13,7 @@ import {
 import ConnectedHeader from '../connectedComponents/ConnectedHeader.js';
 import * as RoutesUtil from '../routes/routesUtil';
 import moment from 'moment';
+
 import ConnectedDicomFilesUploader from '../googleCloud/ConnectedDicomFilesUploader';
 import ConnectedDicomStorePicker from '../googleCloud/ConnectedDicomStorePicker';
 import filesToStudies from '../lib/filesToStudies.js';
@@ -21,6 +22,7 @@ import filesToStudies from '../lib/filesToStudies.js';
 import UserManagerContext from '../context/UserManagerContext';
 import WhiteLabelingContext from '../context/WhiteLabelingContext';
 import AppContext from '../context/AppContext';
+import NotFound from '../routes/NotFound.js';
 
 const { urlUtil: UrlUtil } = OHIF.utils;
 
@@ -158,17 +160,18 @@ function StudyListRoute(props) {
     );
 
     healthCareApiButtons = (
-      <div
-        className="form-inline btn-group pull-right"
-        style={{ padding: '20px' }}
-      >
-        <button
-          className="btn btn-primary"
-          onClick={() => setActiveModalId('DicomStorePicker')}
-        >
-          {t('Change DICOM Store')}
-        </button>
-      </div>
+      // <div
+      //   className="form-inline btn-group pull-right"
+      //   style={{ padding: '20px' }}
+      // >
+      //   <button
+      //     className="btn btn-primary"
+      //     onClick={() => setActiveModalId('DicomStorePicker')}
+      //   >
+      //     {t('Change DICOM Store')}
+      //   </button>
+      // </div>
+      <></>
     );
   }
 
@@ -202,46 +205,7 @@ function StudyListRoute(props) {
 
   return (
     <>
-      {studyListFunctionsEnabled ? (
-        <ConnectedDicomFilesUploader
-          isOpen={activeModalId === 'DicomFilesUploader'}
-          onClose={() => setActiveModalId(null)}
-        />
-      ) : null}
-      {healthCareApiWindows}
-      <WhiteLabelingContext.Consumer>
-        {whiteLabeling => (
-          <UserManagerContext.Consumer>
-            {userManager => (
-              <ConnectedHeader
-                useLargeLogo={true}
-                user={user}
-                userManager={userManager}
-              >
-                {whiteLabeling &&
-                  whiteLabeling.createLogoComponentFn &&
-                  whiteLabeling.createLogoComponentFn(React)}
-              </ConnectedHeader>
-            )}
-          </UserManagerContext.Consumer>
-        )}
-      </WhiteLabelingContext.Consumer>
-      <div className="study-list-header">
-        <div className="header">
-          <h1 style={{ fontWeight: 300, fontSize: '22px' }}>
-            {t('StudyList')}
-          </h1>
-        </div>
-        <div className="actions">
-          {studyListFunctionsEnabled && healthCareApiButtons}
-          {studyListFunctionsEnabled && (
-            <PageToolbar
-              onImport={() => setActiveModalId('DicomFilesUploader')}
-            />
-          )}
-          <span className="study-count">{studies.length}</span>
-        </div>
-      </div>
+      <NotFound />
 
       <div className="table-head-background" />
       <div className="study-list-container">

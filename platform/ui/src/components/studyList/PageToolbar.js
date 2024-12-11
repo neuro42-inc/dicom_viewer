@@ -31,7 +31,7 @@ class PageToolbar extends PureComponent {
   }
 
   render() {
-    return <div className="studylistToolbar">{this.getImportTool()}</div>;
+    return <></>;
   }
 }
 

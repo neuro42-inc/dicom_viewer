@@ -15,7 +15,7 @@ window.config = {
       // Authorization Server URL
       authority: 'https://accounts.google.com',
       client_id:
-        '653987524527-m45ifri5k1q7ram1ql37tcubu334tvq3.apps.googleusercontent.com',
+        '407770267012-4pcattjamo3q026bq5qe6pn3t716s37b.apps.googleusercontent.com',
       redirect_uri: '/callback', // `OHIFStandaloneViewer.js`
       response_type: 'id_token token',
       scope:
@@ -36,7 +36,6 @@ window.config = {
         target: '_self',
         rel: 'noopener noreferrer',
         className: 'header-brand',
-        href: '/',
         style: {
           display: 'block',
           textIndent: '-9999px',

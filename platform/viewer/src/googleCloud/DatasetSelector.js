@@ -92,30 +92,10 @@ class DatasetSelector extends Component {
       onDicomStoreSelect,
     } = this;
 
-    let projectBreadcrumbs = (
-      <div className="gcp-picker--path">
-        <span>{this.props.t('Select a Project')}</span>
-      </div>
-    );
+    let projectBreadcrumbs = <></>;
 
     if (project) {
-      projectBreadcrumbs = (
-        <div className="gcp-picker--path">
-          <span onClick={onProjectClick}>{project.name}</span>
-          {project && location && (
-            <span onClick={onLocationClick}>
-              {' '}
-              -> {location.name.split('/')[3]}
-            </span>
-          )}
-          {project && location && dataset && (
-            <span onClick={onDatasetClick}>
-              {' '}
-              -> {dataset.name.split('/')[5]}
-            </span>
-          )}
-        </div>
-      );
+      projectBreadcrumbs = <></>;
     }
 
     return (
